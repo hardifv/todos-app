@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TaskItem from "../components/TaskItem";
@@ -13,8 +12,6 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     if (!token) {
       setErrorMessage("No estás autenticado. Por favor inicia sesión.");
-      // Opcional: navegar a login después de mostrar el mensaje
-      // setTimeout(() => navigate("/login"), 2000);
       return;
     }
 
@@ -31,8 +28,6 @@ export default function Dashboard() {
 
         if (res.status === 401 || res.status === 403) {
           setErrorMessage("Token inválido o expirado. Por favor inicia sesión nuevamente.");
-          // Opcional: navegar a login después de mostrar mensaje
-          // setTimeout(() => navigate("/login"), 3000);
         } else {
           setErrorMessage("Error al cargar las tareas. Intenta más tarde.");
         }
@@ -157,7 +152,18 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-xl mx-auto mt-10 px-4">
-      <h1 className="text-3xl font-bold mb-4">Mis Tareas</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Mis Tareas</h1>
+        <button
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/login");
+          }}
+          className="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        >
+          Cerrar sesión
+        </button>
+      </div>
 
       {errorMessage && (
         <div className="mb-4 p-3 bg-red-200 text-red-800 rounded">
@@ -172,6 +178,12 @@ export default function Dashboard() {
           placeholder="Nueva tarea..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); // evita que se envíe un form si está dentro de uno
+              addTask();
+            }
+          }}
         />
         <button
           onClick={addTask}

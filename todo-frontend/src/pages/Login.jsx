@@ -1,6 +1,5 @@
-// src/pages/Login.jsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -67,6 +66,13 @@ function Login() {
         >
           Iniciar sesión
         </button>
+
+        <p className="text-center text-sm mt-4">
+          ¿No tienes cuenta?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Regístrate
+          </Link>
+        </p>
       </form>
     </div>
   );

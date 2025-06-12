@@ -1,7 +1,7 @@
 // src/routes/task.routes.js
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import authenticate from '../middleware/auth.js';
+import authenticate from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -13,7 +13,7 @@ router.use(authenticate);
 router.get('/', async (req, res) => {
   try {
     const tasks = await prisma.task.findMany({
-      where: { userId: req.user.userId },
+      where: { userId: req.userId },
     });
     res.json(tasks);
   } catch (error) {
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     const task = await prisma.task.create({
       data: {
         title,
-        userId: req.user.userId,
+        userId: req.userId,
       },
     });
     res.status(201).json(task);
@@ -49,7 +49,7 @@ router.put('/:id', async (req, res) => {
       where: { id: Number(id) },
     });
 
-    if (!existingTask || existingTask.userId !== req.user.userId) {
+    if (!existingTask || existingTask.userId !== req.userId) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
@@ -76,7 +76,7 @@ router.delete('/:id', async (req, res) => {
       where: { id: Number(id) },
     });
 
-    if (!existingTask || existingTask.userId !== req.user.userId) {
+    if (!existingTask || existingTask.userId !== req.userId) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 

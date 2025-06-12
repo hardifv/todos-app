@@ -1,6 +1,5 @@
-// src/pages/Register.jsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
   const [email, setEmail] = useState('');
@@ -65,6 +64,13 @@ function Register() {
         >
           Registrarse
         </button>
+
+        <p className="text-center text-sm mt-4">
+          ¿Ya tienes cuenta?{" "}
+          <Link to="/login" className="text-blue-500 hover:underline">
+            Inicia sesión
+          </Link>
+        </p>
       </form>
     </div>
   );

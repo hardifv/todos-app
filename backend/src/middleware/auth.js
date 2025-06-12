@@ -1,23 +1,20 @@
 // src/middleware/auth.js
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secreto_dev';
+const SECRET = process.env.JWT_SECRET || 'devsecret';
 
-const authenticate = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // formato: Bearer token
-
-  if (!token) {
-    return res.status(401).json({ message: 'Token no proporcionado' });
+export default function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'No autorizado' });
   }
 
+  const token = authHeader.split(' ')[1];
   try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    req.userId = payload.userId;
+    const decoded = jwt.verify(token, SECRET);
+    req.userId = decoded.userId;  // Importante que coincida con el payload real
     next();
-  } catch (err) {
-    return res.status(403).json({ message: 'Token inválido o expirado' });
+  } catch (error) {
+    return res.status(401).json({ message: 'Token inválido o expirado' });
   }
-};
-
-module.exports = authenticate;
+}
