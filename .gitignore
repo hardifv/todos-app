@@ -1,0 +1,33 @@
+# General
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.DS_Store
+
+# Backend específico
+/backend/node_modules/
+backend/.env
+backend/dist/
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+backend/prisma/migrations/
+
+# Frontend específico
+/frontend/node_modules/
+frontend/.env
+frontend/.next/
+frontend/build/
+frontend/dist/
+
+# Optional: sistema operativo/editor
+.vscode/
+.idea/
+*.swp
+*.swo
